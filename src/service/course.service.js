@@ -1,13 +1,20 @@
 const constants = require('../util/constants');
+const courseModel =  require('../model/course.model')
 
-exports.createCourse = (payload, userId = constants.DEFAULT) => {
+exports.createCourse = async (payload, userId = constants.DEFAULT) => {
     if(!payload){
         return {
             errorType: constants.VALIDATION,
             message: 'Missing required elements'
         }
     }
-    return {
-        message: "Course created Successfully"
+    let {courseName} = payload;
+    if(courseName){
+        return await courseModel.createCourse(courseName, userId);
+    }else{
+        return {
+            errorType: constants.VALIDATION,
+            message: "Invalid Payload"
+        }
     }
 }
